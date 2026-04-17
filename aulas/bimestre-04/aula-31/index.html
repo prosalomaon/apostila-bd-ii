@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 31: Introdução ao NoSQL | BD-II ETEC</title>
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">Desenvolvimento de Sistemas</div>
+      <nav>
+        <a href="../../../index.html">DASHBOARD</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Aula 31: Introdução ao NoSQL</h1>
+    <p>Explorando modelos de dados não estruturados, escalabilidade e o Teorema CAP.</p>
+
+    <section class="section-box">
+      <h2>Teoria & Conceitos</h2>
+      <p>O termo NoSQL (Not Only SQL) refere-se a bancos de dados que não utilizam o modelo relacional tradicional. Eles
+        surgiram para lidar com o grande volume, velocidade e variedade de dados (Big Data).</p>
+      <ul>
+        <li><strong>Flexibilidade de Esquema:</strong> Não exige uma estrutura rígida de tabelas e colunas.</li>
+        <li><strong>Escalonamento Horizontal:</strong> Projetados para rodar em clusters de servidores comuns.</li>
+        <li><strong>Teorema CAP:</strong> Um sistema distribuído só pode garantir dois dos três pilares: Consistência,
+          Disponibilidade e Tolerância a Partição.</li>
+      </ul>
+    </section>
+
+    <section class="section-box">
+      <h2>Tipos de NoSQL</h2>
+      <div class="code-container">
+        <pre><code>1. Documentos (ex: MongoDB, CouchDB)
+2. Chave-Valor (ex: Redis, DynamoDB)
+3. Colunas (ex: Cassandra, HBase)
+4. Grafos (ex: Neo4j)</code></pre>
+      </div>
+    </section>
+
+    <section class="section-box">
+      <h2>Diagramação Lógica</h2>
+      <div class="mermaid">
+        graph TD
+        CAP[Teorema CAP] --> C[Consistência]
+        CAP --> A[Disponibilidade]
+        CAP --> P[Tolerância a Partição]
+        C --- A
+        A --- P
+        P --- C
+      </div>
+    </section>
+
+    <div class="tip-box">
+      <h4>Dicas & Lembretes</h4>
+      <p>NoSQL não substitui o SQL. NoSQL é uma ferramenta específica para casos de uso onde a estrutura dos dados muda
+        muito ou onde a performance de leitura/escrita em massa é crítica.</p>
+    </div>
+
+    <section class="section-box">
+      <h2>Como aplicar na Prática</h2>
+      <p>Use bancos de documentos para armazenar perfis de usuários em redes sociais, onde cada usuário pode ter
+        informações diferentes (uns têm Instagram, outros não, outros têm 10 endereços, etc.).</p>
+    </section>
+
+    <section class="section-box">
+      <h2>Referências</h2>
+      <ul>
+        <li>Martin Fowler: NoSQL Distilled.</li>
+        <li>MongoDB University - Basics Course.</li>
+      </ul>
+    </section>
+
+    <section class="section-box">
+      <h2>Links para Exercícios</h2>
+      <ul>
+        <li><a href="#">Pesquisa: Casos de Sucesso NoSQL no Mercado</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 - Professor Salomão
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</body>
+
+</html>
