@@ -12,7 +12,7 @@
 <body>
   <header>
     <div class="container">
-      <a href="../../../index.html" class="logo">Desenvolvimento de Sistemas</a>
+      <a href="../../../index.html" class="logo">Banco de Dados II</a>
       <nav>
         <a href="../../../index.html">VOLTAR</a>
       </nav>
@@ -25,17 +25,91 @@
 
     <section class="section-box">
       <h2>Teoria & Conceitos</h2>
-      <p>A segurança em bancos de dados é gerenciada por meio do controle de privilégios. Embora os conceitos fundamentais sejam similares, MySQL e PostgreSQL possuem implementações distintas:</p>
+      <p>A segurança em Sistemas Gerenciadores de Banco de Dados (SGBD) é uma disciplina essencial que visa proteger os
+        dados contra o uso indevido e garantir que cada usuário acesse apenas as informações estritamente necessárias
+        para suas funções. No contexto da linguagem SQL, esta camada é gerenciada pela DCL (Data Control Language), que
+        trata da Autorização de acesso aos objetos do banco.</p>
+
+      <h3>1. Autenticação vs. Autorização</h3>
+      <p>Antes de manipular qualquer dado, o SGBD processa duas etapas de segurança distintas:</p>
       <ul>
-        <li><strong>MySQL:</strong> Baseia-se em <code>usuário@host</code> e armazena permissões na tabela <code>mysql.user</code>.</li>
-        <li><strong>PostgreSQL:</strong> Utiliza o conceito de <strong>Roles</strong> (Papéis), unificando usuários e grupos em objetos globais do cluster, geridos em catálogos como <code>pg_roles</code>.</li>
+        <li><strong>Autenticação:</strong> O processo de verificar a identidade do usuário (quem você é). Geralmente
+          envolve um nome de usuário, um host de origem e uma senha.</li>
+        <li><strong>Autorização:</strong> Uma vez identificado, o sistema verifica quais privilégios o usuário possui (o
+          que você pode fazer). Esta aula foca na gestão desses privilégios através do dicionário de dados do sistema.
+        </li>
       </ul>
-      <p>Os comandos fundamentais em ambos são:</p>
+
+      <h3>2. Comandos Fundamentais da DCL</h3>
+      <p>Segundo o padrão ANSI SQL e as práticas de mercado, existem três comandos principais para o controle de acesso:
+      </p>
       <ul>
-        <li><strong>CREATE USER / ROLE:</strong> Registra uma nova identidade no sistema.</li>
-        <li><strong>GRANT:</strong> Concede privilégios (leitura, escrita, execução) em diferentes níveis.</li>
-        <li><strong>REVOKE:</strong> Remove privilégios concedidos anteriormente.</li>
+        <li><strong>GRANT (Conceder):</strong> Atribui permissões específicas (como SELECT, INSERT, UPDATE) a um usuário
+          ou papel.</li>
+        <li><strong>REVOKE (Revogar):</strong> Remove privilégios anteriormente concedidos, impedindo que o usuário
+          realize certas operações, mas mantendo o acesso que não foi revogado.</li>
+        <li><strong>DENY (Negar):</strong> Comando comum em sistemas como SQL Server para proibir explicitamente um
+          acesso. No PostgreSQL e MySQL, a negação é geralmente implícita (se não foi dado o GRANT, o acesso é negado
+          por padrão).</li>
       </ul>
+
+      <h3>3. Granularidade e Níveis de Acesso</h3>
+      <p>A segurança deve ser aplicada em diferentes níveis de "profundidade" para garantir o Princípio do Privilégio
+        Mínimo:</p>
+      <ul>
+        <li><strong>Global (Servidor):</strong> Privilégios que afetam todo o servidor de banco de dados (ex: criar
+          novos bancos ou gerenciar outros usuários).</li>
+        <li><strong>Database/Esquema:</strong> Permissões para agir dentro de um banco de dados específico.</li>
+        <li><strong>Tabela/Visão:</strong> Controle sobre objetos individuais. O analista pode permitir que um usuário
+          leia uma tabela, mas não a altere.</li>
+        <li><strong>Coluna:</strong> Nível avançado onde se permite o acesso a campos específicos de uma tabela (ex: um
+          vendedor pode ver o nome do produto, mas não o preço de custo).</li>
+        <li><strong>Rotina (Procedures/Functions):</strong> Permissão para executar lógicas de negócio programadas no
+          servidor.</li>
+      </ul>
+
+      <h3>4. Diferenças de Implementação: MySQL vs. PostgreSQL</h3>
+      <p>Embora ambos sigam o padrão SQL para autorização, a arquitetura interna de segurança varia:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Conceito</th>
+            <th>MySQL</th>
+            <th>PostgreSQL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Identidade</strong></td>
+            <td>Baseada em User + Host (ex: 'aluno'@'localhost'). O local de onde o usuário conecta é parte da sua
+              identidade.</td>
+            <td>Baseada em Roles (Papéis). Uma Role pode ser um usuário individual ou um grupo que contém outros
+              usuários.</td>
+          </tr>
+          <tr>
+            <td><strong>Armazenamento</strong></td>
+            <td>Privilégios globais são armazenados na tabela de sistema <code>mysql.user</code>.</td>
+            <td>Privilégios são gerenciados via catálogos como <code>pg_authid</code> e <code>pg_roles</code>.</td>
+          </tr>
+          <tr>
+            <td><strong>Acesso a Objetos</strong></td>
+            <td>Dar privilégio em um database permite acesso imediato às tabelas.</td>
+            <td>Exige o privilégio de <code>USAGE</code> no <code>SCHEMA</code> (esquema) antes que o usuário possa
+              acessar qualquer tabela dentro dele.</td>
+          </tr>
+          <tr>
+            <td><strong>Propriedade</strong></td>
+            <td>O criador da tabela é o Owner e possui controle total sobre ela por padrão.</td>
+            <td>Segue o rigor do Owner, mas permite a transferência de posse de forma mais granular através de
+              <code>ALTER OWNER</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>5. Integridade e Segurança</h3>
+      <p>A segurança de acesso é um complemento às Restrições de Integridade. Enquanto as chaves primárias e
+        estrangeiras garantem que os dados sejam logicamente corretos, os privilégios garantem que apenas as pessoas
+        certas possam inserir ou modificar esses dados, mantendo a consistência do banco de dados a longo prazo.</p>
     </section>
 
     <section class="section-box">
@@ -94,19 +168,19 @@ DROP ROLE vendedor_sp;</code></pre>
       <h2>Fluxo de Segurança (Abstraído)</h2>
       <p>Este fluxo detalha como o SGBD valida a identidade e os privilégios em ambos os sistemas:</p>
       <div class="mermaid">
-graph TD
-    A[Usuário/Aplicação] -->|Conexão| B{Autenticação}
-    B -->|MySQL: mysql.user| C[Identifica User + Host]
-    B -->|PG: pg_hba.conf| D[Identifica Role + IP]
-    
-    C & D --> E{Credenciais Válidas?}
-    E -->|Não| F[Acesso Negado]
-    E -->|Sim| G{Executa SQL}
-    
-    G --> H{Autorização}
-    H -->|Verifica Grants| I{Privilégio OK?}
-    I -->|Não| J[Erro de Permissão]
-    I -->|Sim| K[Sucesso]
+        graph TD
+        A[Usuário/Aplicação] -->|Conexão| B{Autenticação}
+        B -->|MySQL: mysql.user| C[Identifica User + Host]
+        B -->|PG: pg_hba.conf| D[Identifica Role + IP]
+
+        C & D --> E{Credenciais Válidas?}
+        E -->|Não| F[Acesso Negado]
+        E -->|Sim| G{Executa SQL}
+
+        G --> H{Autorização}
+        H -->|Verifica Grants| I{Privilégio OK?}
+        I -->|Não| J[Erro de Permissão]
+        I -->|Sim| K[Sucesso]
       </div>
     </section>
 
@@ -114,26 +188,33 @@ graph TD
       <h4>Dicas & Lembretes</h4>
       <ul>
         <li><strong>MySQL Host:</strong> 'aluno'@'localhost' é diferente de 'aluno'@'%'.</li>
-        <li><strong>PostgreSQL Host:</strong> O controle de acesso por IP e método de conexão é feito no arquivo externo <code>pg_hba.conf</code>.</li>
-        <li><strong>Princípio do Privilégio Mínimo:</strong> Nunca conceda <code>ALL PRIVILEGES</code> ou <code>SUPERUSER</code> se apenas <code>SELECT</code> for necessário.</li>
-        <li><strong>Esquemas no PG:</strong> Lembre-se que no PostgreSQL, dar grant em uma tabela exige também permissão de <code>USAGE</code> no <code>SCHEMA</code> correspondente.</li>
+        <li><strong>PostgreSQL Host:</strong> O controle de acesso por IP e método de conexão é feito no arquivo externo
+          <code>pg_hba.conf</code>.</li>
+        <li><strong>Princípio do Privilégio Mínimo:</strong> Nunca conceda <code>ALL PRIVILEGES</code> ou
+          <code>SUPERUSER</code> se apenas <code>SELECT</code> for necessário.</li>
+        <li><strong>Esquemas no PG:</strong> Lembre-se que no PostgreSQL, dar grant em uma tabela exige também permissão
+          de <code>USAGE</code> no <code>SCHEMA</code> correspondente.</li>
       </ul>
     </div>
 
     <section class="section-box">
       <h2>Como aplicar na Prática</h2>
       <ul>
-        <li><strong>Auditoria:</strong> Utilize <code>SELECT User, Host, plugin FROM mysql.user;</code> para listar todos os usuários.</li>
+        <li><strong>Auditoria:</strong> Utilize <code>SELECT User, Host, plugin FROM mysql.user;</code> para listar
+          todos os usuários.</li>
         <li><strong>Fraquezas:</strong> Procure por usuários sem senha ou que utilizam plug-ins depreciados.</li>
-        <li><strong>Segregação de Funções:</strong> Crie usuários distintos para desenvolvedor, analista e sistema de backup.</li>
+        <li><strong>Segregação de Funções:</strong> Crie usuários distintos para desenvolvedor, analista e sistema de
+          backup.</li>
       </ul>
     </section>
 
     <section class="section-box">
       <h2>Referências</h2>
       <ul>
-        <li>MACHADO, Felipe Nery Rodrigues. Projeto e implementação de banco de dados. 3. ed. São Paulo: Érica, 2014.</li>
-        <li>TAKAI, Osvaldo Kotaro; ITALIANO, Isabel Cristina; FERREIRA, João Eduardo. Introdução a Banco de Dados. São Paulo: DCC-IME-USP, 2005.</li>
+        <li>MACHADO, Felipe Nery Rodrigues. Projeto e implementação de banco de dados. 3. ed. São Paulo: Érica, 2014.
+        </li>
+        <li>TAKAI, Osvaldo Kotaro; ITALIANO, Isabel Cristina; FERREIRA, João Eduardo. Introdução a Banco de Dados. São
+          Paulo: DCC-IME-USP, 2005.</li>
         <li>MySQL Cookbook, 3rd Edition.</li>
       </ul>
     </section>
@@ -157,4 +238,3 @@ graph TD
 </body>
 
 </html>
-
