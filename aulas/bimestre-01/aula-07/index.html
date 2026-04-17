@@ -114,53 +114,97 @@
 
     <section class="section-box">
       <h2>Exemplo de Código</h2>
-      <p>Abaixo, comparamos a sintaxe para as principais operações de segurança.</p>
+      <p>Abaixo, apresentamos as principais operações de DCL comparando as sintaxes entre os dois ambientes.</p>
 
-      <h3>1. Criação de Usuários</h3>
+      <h3>1. Gestão de Usuários (User Management)</h3>
       <div class="code-container">
         <pre><code class="language-sql">-- [ MySQL ]
-CREATE USER 'vendedor_sp'@'localhost' IDENTIFIED BY 'Senha@123';
-CREATE USER 'admin_fin'@'%' IDENTIFIED WITH 'sha256_password' BY 'Forte#2024';
+-- Criar um usuário que só acessa localmente
+CREATE USER 'professor_ti'@'localhost' IDENTIFIED BY 'SenhaForte123!';
+-- Criar um usuário que acessa de qualquer lugar (%)
+CREATE USER 'aluno_etec'@'%' IDENTIFIED BY 'Estudar@2026';
+-- Alterar a senha e remover usuário
+ALTER USER 'aluno_etec'@'%' IDENTIFIED BY 'NovaSenha456!';
+DROP USER 'aluno_etec'@'%';
+-- Listar usuários
+SELECT user, host FROM mysql.user;
 
 -- [ PostgreSQL ]
-CREATE USER vendedor_sp WITH PASSWORD 'Senha@123';
--- Em PG, usuários e roles são o mesmo objeto, mas 'user' implica LOGIN
-CREATE ROLE auditor WITH LOGIN PASSWORD 'Auditoria!99';</code></pre>
+-- No PG, a restrição de host é feita no arquivo pg_hba.conf externo
+CREATE USER professor_ti WITH PASSWORD 'SenhaForte123!';
+CREATE USER aluno_etec WITH PASSWORD 'Estudar@2026';
+-- Alterar a senha e remover usuário
+ALTER ROLE aluno_etec WITH PASSWORD 'NovaSenha456!';
+DROP USER aluno_etec;
+-- Listar usuários (catálogo ou comando \du no psql)
+SELECT usename FROM pg_user;</code></pre>
       </div>
 
-      <h3>2. Gestão de Privilégios</h3>
+      <h3>2. Concessão de Privilégios (GRANT)</h3>
       <div class="code-container">
         <pre><code class="language-sql">-- [ MySQL ]
--- Global
-GRANT ALL PRIVILEGES ON *.* TO 'super_user'@'localhost';
--- Database/Tabela
-GRANT SELECT, INSERT ON vendas.* TO 'gerente'@'%';
--- Coluna
-GRANT SELECT (nome, cargo) ON vendas.EMPREGADO TO 'recepcionista'@'localhost';
+-- Dar todas as permissões em um banco específico
+GRANT ALL PRIVILEGES ON barbearia_etec.* TO 'professor_ti'@'localhost';
+-- Permissão apenas de leitura (SELECT)
+GRANT SELECT ON barbearia_etec.* TO 'estagiario'@'%';
+-- Granular: Acesso apenas a colunas específicas
+GRANT SELECT (nome, cargo) ON empresa.funcionarios TO 'rh_junior'@'%';
 
 -- [ PostgreSQL ]
--- Global (Superuser)
-ALTER ROLE super_user WITH SUPERUSER;
--- Database
-GRANT CONNECT ON DATABASE vendas TO gerente;
--- Schema/Tabela (PostgreSQL requer permissão no Schema)
-GRANT USAGE ON SCHEMA public TO gerente;
-GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO gerente;</code></pre>
+-- Dar todas as permissões (Requer permissão no banco e no schema)
+GRANT ALL PRIVILEGES ON DATABASE barbearia_etec TO professor_ti;
+GRANT CONNECT ON DATABASE barbearia_etec TO estagiario;
+GRANT USAGE ON SCHEMA public TO estagiario;
+-- Permissão de leitura em todas as tabelas do schema public
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO estagiario;
+-- Granular: Acesso a colunas específicas (Sintaxe idêntica)
+GRANT SELECT (nome, cargo) ON funcionarios TO rh_junior;</code></pre>
       </div>
 
-      <h3>3. Manutenção e Auditoria</h3>
+      <h3>3. Remoção de Privilégios (REVOKE)</h3>
       <div class="code-container">
         <pre><code class="language-sql">-- [ MySQL ]
-REVOKE DELETE ON vendas.* FROM 'gerente'@'%';
-SHOW GRANTS FOR 'gerente'@'%';
-DROP USER 'vendedor_sp'@'localhost';
+-- Remover a permissão de deletar dados
+REVOKE DELETE ON barbearia_etec.* FROM 'analista'@'%';
+-- Remover todos os privilégios
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'analista'@'%';
 
 -- [ PostgreSQL ]
-REVOKE DELETE ON ALL TABLES IN SCHEMA public FROM gerente;
--- Auditoria via catálogo ou psql
-\du              -- Lista roles no psql
-SELECT * FROM information_schema.role_table_grants WHERE grantee = 'gerente';
-DROP ROLE vendedor_sp;</code></pre>
+-- Remover permissão de delete no schema
+REVOKE DELETE ON ALL TABLES IN SCHEMA public FROM analista;
+-- Remover todos os privilégios nas tabelas
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM analista;</code></pre>
+      </div>
+
+      <h3>4. Consultando Permissões</h3>
+      <div class="code-container">
+        <pre><code class="language-sql">-- [ MySQL ]
+-- Ver as permissões do usuário logado ou específico
+SHOW GRANTS;
+SHOW GRANTS FOR 'professor_ti'@'localhost';
+
+-- [ PostgreSQL ]
+-- No psql (Prompt de comando)
+\du
+-- Via SQL (Consultando o information_schema)
+SELECT * FROM information_schema.role_table_grants 
+WHERE grantee = 'professor_ti';</code></pre>
+      </div>
+
+      <h3>5. Roles (Papéis) - MySQL 8.0+ e PostgreSQL</h3>
+      <div class="code-container">
+        <pre><code class="language-sql">-- [ MySQL ]
+CREATE ROLE 'dev_pleno';
+GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO 'dev_pleno';
+-- Atribuir a Role ao usuário e ativar como padrão
+GRANT 'dev_pleno' TO 'aluno_etec'@'%';
+SET DEFAULT ROLE 'dev_pleno' TO 'aluno_etec'@'%';
+
+-- [ PostgreSQL ]
+CREATE ROLE dev_pleno;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO dev_pleno;
+-- Atribuir a Role ao usuário (Herdará as permissões automaticamente)
+GRANT dev_pleno TO aluno_etec;</code></pre>
       </div>
     </section>
 
@@ -194,6 +238,7 @@ DROP ROLE vendedor_sp;</code></pre>
           <code>SUPERUSER</code> se apenas <code>SELECT</code> for necessário.</li>
         <li><strong>Esquemas no PG:</strong> Lembre-se que no PostgreSQL, dar grant em uma tabela exige também permissão
           de <code>USAGE</code> no <code>SCHEMA</code> correspondente.</li>
+        <li><strong>FLUSH PRIVILEGES (MySQL):</strong> Só é necessário se você alterar as tabelas de sistema manualmente (via DML). Comandos DCL (GRANT, REVOKE) recarregam as permissões automaticamente.</li>
       </ul>
     </div>
 
