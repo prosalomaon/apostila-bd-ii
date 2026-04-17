@@ -14,7 +14,7 @@
     <div class="container">
       <a href="../../../index.html" class="logo">Banco de Dados II</a>
       <nav>
-        <a href="../../../index.html">VOLTAR</a>
+        <a href="../../../index.html">⮜ VOLTAR</a>
       </nav>
     </div>
   </header>
@@ -101,7 +101,8 @@
             <td><strong>Propriedade</strong></td>
             <td>O criador da tabela é o Owner e possui controle total sobre ela por padrão.</td>
             <td>Segue o rigor do Owner, mas permite a transferência de posse de forma mais granular através de
-              <code>ALTER OWNER</code>.</td>
+              <code>ALTER OWNER</code>.
+            </td>
           </tr>
         </tbody>
       </table>
@@ -233,12 +234,15 @@ GRANT dev_pleno TO aluno_etec;</code></pre>
       <ul>
         <li><strong>MySQL Host:</strong> 'aluno'@'localhost' é diferente de 'aluno'@'%'.</li>
         <li><strong>PostgreSQL Host:</strong> O controle de acesso por IP e método de conexão é feito no arquivo externo
-          <code>pg_hba.conf</code>.</li>
+          <code>pg_hba.conf</code>.
+        </li>
         <li><strong>Princípio do Privilégio Mínimo:</strong> Nunca conceda <code>ALL PRIVILEGES</code> ou
-          <code>SUPERUSER</code> se apenas <code>SELECT</code> for necessário.</li>
+          <code>SUPERUSER</code> se apenas <code>SELECT</code> for necessário.
+        </li>
         <li><strong>Esquemas no PG:</strong> Lembre-se que no PostgreSQL, dar grant em uma tabela exige também permissão
           de <code>USAGE</code> no <code>SCHEMA</code> correspondente.</li>
-        <li><strong>FLUSH PRIVILEGES (MySQL):</strong> Só é necessário se você alterar as tabelas de sistema manualmente (via DML). Comandos DCL (GRANT, REVOKE) recarregam as permissões automaticamente.</li>
+        <li><strong>FLUSH PRIVILEGES (MySQL):</strong> Só é necessário se você alterar as tabelas de sistema manualmente
+          (via DML). Comandos DCL (GRANT, REVOKE) recarregam as permissões automaticamente.</li>
       </ul>
     </div>
 

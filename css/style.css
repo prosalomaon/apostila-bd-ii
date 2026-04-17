@@ -251,6 +251,58 @@ footer {
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    padding-left: 0.75rem;
+  }
+
+  .section-box {
+    padding: 1.25rem;
+    border-width: 1px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Full width blocks on mobile */
+  .code-container,
+  .tip-box,
+  .mermaid {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    border-left: none;
+    border-right: none;
+  }
+
+  pre {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .tip-box {
+    padding: 1.25rem 1rem;
+  }
+
+  /* Table responsiveness */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-width: 1px;
+  }
+
+  th, td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    min-width: 120px; /* Ensures table doesn't get too squished */
+  }
+
+  .mermaid {
+    padding: 0.5rem;
+    justify-content: flex-start;
   }
 }
