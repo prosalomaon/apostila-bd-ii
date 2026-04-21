@@ -1,0 +1,64 @@
+---
+layout: base
+title: "Banco de Dados II - Apostila Digital"
+nav_text: "DASHBOARD"
+---
+
+<h1>Banco de Dados II</h1>
+<p>Esta disciplina aprofunda o conhecimento em sistemas de gerenciamento de dados, focando na implementação física rigorosa, otimização de performance e automação avançada. Durante o curso, o aluno aprenderá a gerenciar integridade referencial, dominar operações complexas de DQL e Álgebra Relacional, e desenvolver lógica de negócio robusta através de Stored Procedures e Triggers. O programa também abrange a transição para modelos não relacionais (NoSQL) e a integração de bancos de dados em ecossistemas de software modernos.</p>
+
+<!-- 1º Bimestre -->
+<section class="bimester-section">
+  <h2 class="bimester-title">1º Bimestre: Implementação Física e Integridade</h2>
+  <div class="lesson-grid">
+    {% for post in collections.bimestre01 %}
+    <a href="{{ post.url | url }}" class="lesson-card">
+      <span class="number">AULA {{ post.data.aula_numero }}</span>
+      <span class="title">{{ post.data.title }}</span>
+      <span class="lesson-desc">{{ post.data.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 2º Bimestre -->
+<section class="bimester-section">
+  <h2 class="bimester-title">2º Bimestre: Performance e Extração de Dados</h2>
+  <div class="lesson-grid">
+    {% for post in collections.bimestre02 %}
+    <a href="{{ post.url | url }}" class="lesson-card">
+      <span class="number">AULA {{ post.data.aula_numero }}</span>
+      <span class="title">{{ post.data.title }}</span>
+      <span class="lesson-desc">{{ post.data.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 3º Bimestre -->
+<section class="bimester-section">
+  <h2 class="bimester-title">3º Bimestre: Programabilidade e Automação</h2>
+  <div class="lesson-grid">
+    {% for post in collections.bimestre03 %}
+    <a href="{{ post.url | url }}" class="lesson-card">
+      <span class="number">AULA {{ post.data.aula_numero }}</span>
+      <span class="title">{{ post.data.title }}</span>
+      <span class="lesson-desc">{{ post.data.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 4º Bimestre -->
+<section class="bimester-section">
+  <h2 class="bimester-title">4º Bimestre: NoSQL e Inteligência de Dados</h2>
+  <div class="lesson-grid">
+    {% for post in collections.bimestre04 %}
+    <a href="{{ post.url | url }}" class="lesson-card">
+      <span class="number">AULA {{ post.data.aula_numero }}</span>
+      <span class="title">{{ post.data.title }}</span>
+      <span class="lesson-desc">{{ post.data.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
