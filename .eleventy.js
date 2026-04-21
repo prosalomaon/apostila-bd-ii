@@ -1,4 +1,4 @@
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
   // Passthrough static assets
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/js");
@@ -14,25 +14,25 @@ module.exports = function(eleventyConfig) {
     });
   };
 
-  eleventyConfig.addCollection("bimestre01", function(collectionApi) {
+  eleventyConfig.addCollection("bimestre01", function (collectionApi) {
     return sortByAula(collectionApi.getFilteredByTag("bimestre-01"));
   });
 
-  eleventyConfig.addCollection("bimestre02", function(collectionApi) {
+  eleventyConfig.addCollection("bimestre02", function (collectionApi) {
     return sortByAula(collectionApi.getFilteredByTag("bimestre-02"));
   });
 
-  eleventyConfig.addCollection("bimestre03", function(collectionApi) {
+  eleventyConfig.addCollection("bimestre03", function (collectionApi) {
     return sortByAula(collectionApi.getFilteredByTag("bimestre-03"));
   });
 
-  eleventyConfig.addCollection("bimestre04", function(collectionApi) {
+  eleventyConfig.addCollection("bimestre04", function (collectionApi) {
     return sortByAula(collectionApi.getFilteredByTag("bimestre-04"));
   });
 
   return {
     // Se for hospedar no GitHub Pages em um subdiretório, adicione o pathPrefix:
-    // pathPrefix: "/nome-do-repositorio/",
+    pathPrefix: "/apostila-bd-ii/",
     dir: {
       input: "src",
       output: "_site"
