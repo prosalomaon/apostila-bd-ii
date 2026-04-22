@@ -36,8 +36,6 @@ h4 {
 
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 2rem;
-  border-bottom: 4px solid var(--border);
   padding-bottom: 0.5rem;
 }
 
@@ -89,8 +87,6 @@ header {
   background: var(--bg);
   color: var(--fg);
   padding: 1.5rem 0;
-  border-bottom: 4px solid var(--border);
-  margin-bottom: 2rem;
 }
 
 header .container {
@@ -105,6 +101,16 @@ header a {
   text-decoration: none;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.back-link {
+  color: var(--fg);
+  padding-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  font-weight: 800;
 }
 
 /* Portal & Dashboard */
@@ -155,6 +161,16 @@ header a {
   /* Keep natural case for lesson titles if preferred, but user screenshot shows bold */
 }
 
+.subject-info {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.subject-status {
+  margin-top: auto;
+}
+
 .subject-status,
 .lesson-card .number {
   font-size: 0.8rem;
@@ -173,7 +189,7 @@ header a {
 
 /* Lesson Content */
 .lesson-header {
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
 }
 
 .aula-badge {
@@ -202,7 +218,8 @@ pre {
   margin: 3rem 0;
 }
 
-.tip-box h3, .tip-box h4 {
+.tip-box h3,
+.tip-box h4 {
   color: #fff;
   border-left: 10px solid #fff;
   padding-left: 1.5rem;
@@ -221,9 +238,10 @@ pre {
 
 .section-box h2 {
   border-left: 10px solid var(--border);
-  padding-left: 1.5rem;
+  padding-left: 1rem;
   margin-bottom: 2rem;
   font-size: 1.6rem;
+  border-bottom: 2px solid var(--border);
 }
 
 .section-box h3 {

@@ -1,0 +1,15 @@
+{
+  "subject": "programacao-e-algoritmos",
+  "subject_title": "Programação e Algoritmos",
+  "subject_description": "Desenvolva o raciocínio lógico e aprenda a construir soluções eficientes através de algoritmos, estruturas de dados e programação orientada a objetos em Java.",
+  "subject_status": "40 Aulas • 4 Bimestres",
+  "layout": "aula",
+  "tags": ["aula"],
+  "nav_text": "⮜ VOLTAR",
+  "bimester_titles": {
+    "bimestre-01": "Fundamentos, Arquitetura e Lógica Visual",
+    "bimestre-02": "Estruturas de Controle (Pseudocódigo + Java)",
+    "bimestre-03": "Estruturas Compostas e Modularização em Java",
+    "bimestre-04": "Versionamento, Qualidade e Projeto Final"
+  }
+}
