@@ -1,0 +1,15 @@
+{
+  "subject": "programacao-web-ii",
+  "subject_title": "Programação Web II",
+  "subject_description": "Desenvolvimento de aplicações server-side com PHP 8, explorando desde a sintaxe básica até arquiteturas modernas como MVC e segurança avançada.",
+  "subject_status": "40 Aulas • 4 Bimestres",
+  "layout": "aula",
+  "tags": ["aula"],
+  "nav_text": "⮜ VOLTAR",
+  "bimester_titles": {
+    "bimestre-01": "Scripts Server-Side e Comunicação Back-end",
+    "bimestre-02": "Programação Orientada a Objetos (OOP) e Arquitetura",
+    "bimestre-03": "Persistência de Dados e CRUD Seguro",
+    "bimestre-04": "Gerenciamento de Estado, Segurança e MVC"
+  }
+}

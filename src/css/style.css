@@ -215,10 +215,6 @@ header a {
 
 
 /* Lesson Content */
-.lesson-header {
-  /* margin-bottom: 3rem; */
-}
-
 .aula-badge {
   display: none;
   /* Removed as per screenshot showing title directly */

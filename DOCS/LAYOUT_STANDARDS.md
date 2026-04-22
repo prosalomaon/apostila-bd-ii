@@ -18,14 +18,15 @@ src/componentes/[nome-do-componente]/
 Toda aula (`index.html`) deve conter obrigatoriamente:
 ```yaml
 ---
-title: "Título da Aula"
-aula_numero: "XX"
-description: "Breve descrição do conteúdo"
+title: "Nome da Aula"           # NÃO incluir "Aula XX: " no título
+aula_numero: "XX"               # Sempre dois dígitos, entre aspas
+description: "Descrição"        # Obrigatório para o card do dashboard
 tags:
   - aula
   - bimestre-XX
 ---
 ```
+> **Nota:** O prefixo "Aula XX: " será adicionado automaticamente pelo layout nas páginas de conteúdo. No dashboard, aparecerá apenas o "Nome da Aula" com o número acima.
 
 ## 3. Estrutura HTML da Aula (Template Padrão)
 
