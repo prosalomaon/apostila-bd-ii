@@ -215,6 +215,18 @@ header a {
 
 
 /* Lesson Content */
+.back-link-class {
+  padding: 0.5rem 0;
+  color: var(--fg);
+  font-weight: normal;
+  transition: all 0.5s ease-in-out;
+}
+
+.back-link-class:hover {
+  text-decoration: underline;
+}
+
+
 .aula-badge {
   display: none;
   /* Removed as per screenshot showing title directly */
