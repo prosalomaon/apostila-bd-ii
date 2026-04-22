@@ -4,61 +4,208 @@ aula_numero: "11"
 description: "Explorando os predicados lógicos LIKE, BETWEEN e IN para filtragem avançada de dados."
 tags:
   - bimestre-02
+---
 
-content_teoria: |
-  <p>Os predicados são filtros lógicos que determinam a "sobrevivência" de um registro no conjunto de resultados, funcionando como a camada de inteligência da cláusula <code>WHERE</code>.</p>
+<h1>Aula 11: DQL Avançada - Predicados IN, LIKE e BETWEEN</h1>
+<p>Os predicados em SQL são filtros lógicos aplicados na cláusula WHERE que determinam se uma tupla (linha) será
+  incluída no conjunto de resultados. Eles são a implementação prática do operador de Seleção (σ) da álgebra relacional.
+</p>
+
+<section class="section-box">
+  <h2>Teoria & Conceitos</h2>
+  <p>Os predicados são filtros lógicos que determinam a "sobrevivência" de um registro no conjunto de resultados,
+    funcionando como a camada de inteligência da cláusula <code>WHERE</code>.</p>
+
   <h3>1. LIKE (Busca de Padrões)</h3>
-  <p>Diferente do operador de igualdade (<code>=</code>), o <code>LIKE</code> trabalha com aproximação e padrões de texto.</p>
+  <p>Diferente do operador de igualdade (<code>=</code>), o <code>LIKE</code> trabalha com aproximação e padrões de
+    texto.</p>
   <ul>
     <li><strong>Cenário Básico:</strong> "Quero todos os nomes que começam com A". &rarr; <code>LIKE 'A%'</code></li>
-    <li><strong>Cenário Avançado:</strong> "Quero códigos de produto que seguem o padrão: duas letras, qualquer coisa no meio e terminam com o número 5". &rarr; <code>LIKE 'AB%5'</code></li>
+    <li><strong>Cenário Avançado:</strong> "Quero códigos de produto que seguem o padrão: duas letras, qualquer coisa no
+      meio e terminam com o número 5". &rarr; <code>LIKE 'AB%5'</code></li>
+    <li><strong>O Curinga <code>_</code> (Underline):</strong> Frequentemente negligenciado, ele é vital para padrões de
+      tamanho fixo. Ex: <code>LIKE '___-2024'</code> encontra qualquer código de 3 caracteres que seja do ano de 2024.
+    </li>
   </ul>
+
+  <h3>Diferenças de Implementação: MySQL vs. PostgreSQL</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Recurso</th>
+        <th>MySQL</th>
+        <th>PostgreSQL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Sensibilidade (Case)</strong></td>
+        <td>Geralmente <em>Case-Insensitive</em> (depende do Collation da coluna).</td>
+        <td>Estritamente <em>Case-Sensitive</em> por padrão.</td>
+      </tr>
+      <tr>
+        <td><strong>Busca Insensível</strong></td>
+        <td>Padrão do sistema na maioria das instalações.</td>
+        <td>Exige o operador específico <code>ILIKE</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Performance</strong></td>
+        <td>Otimizado para <code>LIKE 'Prefixo%'</code> usando índices.</td>
+        <td>Utiliza índices B-tree (Prefixo) ou GIN/GIST para buscas complexas.</td>
+      </tr>
+    </tbody>
+  </table>
+
   <h3>2. BETWEEN (Faixa de Valores)</h3>
   <p>O grande diferencial do <code>BETWEEN</code> é a legibilidade e a limpeza do código.</p>
+  <ul>
+    <li><strong>Inclusividade:</strong> Ele sempre inclui os "muros" da busca. <code>BETWEEN 10 AND 20</code> é
+      exatamente <code>valor >= 10 AND valor <= 20</code>.</li>
+    <li><strong>Datas:</strong> É a forma mais elegante de filtrar períodos. Ex:
+      <code>BETWEEN '2024-01-01' AND '2024-01-31'</code>.
+    </li>
+    <li><strong>Atenção:</strong> Em campos do tipo <code>DATETIME</code>, o limite superior <code>'2024-01-31'</code> é
+      lido como <code>'2024-01-31 00:00:00'</code>. Registros do final do dia podem ser excluídos se você não considerar
+      o horário.</li>
+  </ul>
+
   <h3>3. IN (Membros de um Conjunto)</h3>
   <p>O <code>IN</code> atua como um "redutor de múltiplos operadores OR".</p>
+  <ul>
+    <li><strong>Cenário Básico:</strong> Substitui a repetição cansativa de
+      <code>estado = 'SP' OR estado = 'RJ' OR estado = 'MG'</code> por apenas <code>estado IN ('SP', 'RJ', 'MG')</code>.
+    </li>
+    <li><strong>Cenário Avançado:</strong> Funciona como uma "ponte" entre tabelas via **Subconsultas**. Você pode
+      perguntar: "Quem são os clientes que compraram o produto X?", e o <code>IN</code> resolve a lista de IDs
+      dinamicamente para você.</li>
+  </ul>
+</section>
 
-content_codigo: |
+<section class="section-box">
+  <h2>Exemplo de Código</h2>
+
+  <h3>Busca por Padrões (LIKE)</h3>
+  <p>Cenário: Busca parcial por nomes de produtos e validação de padrões fixos.</p>
   <div class="code-container">
     <pre><code class="language-sql">-- [ MySQL ]
-  SELECT descricao FROM produto WHERE descricao LIKE 'Gel%';
-  
-  -- [ PostgreSQL ]
-  SELECT descricao FROM produto WHERE descricao ILIKE 'gel%';</code></pre>
+-- Busca insensível a maiúsculas (dependendo do collation)
+SELECT descricao FROM produto WHERE descricao LIKE 'Gel%';
+
+-- [ PostgreSQL ]
+-- O LIKE no Postgres é case-sensitive. Use ILIKE para ignorar a caixa.
+SELECT descricao FROM produto WHERE descricao ILIKE 'gel%';
+
+-- [ Padrões Fixos ]
+-- Encontra CPFs com padrão exato (usando _ para posições fixas)
+SELECT nome FROM vendedores WHERE cpf LIKE '123.______.____-00';</code></pre>
   </div>
 
-content_grafico: |
+  <h3>Filtro de Faixas (BETWEEN)</h3>
+  <p>Cenário: Filtragem de preços e períodos de datas.</p>
+  <div class="code-container">
+    <pre><code class="language-sql">-- Filtro de preço inclusivo (valor >= 10 AND valor <= 50)
+SELECT descricao_produto, valor_unitario 
+FROM produto 
+WHERE valor_unitario BETWEEN 10.00 AND 50.00;
+
+-- Filtro de Datas: Cuidado com o limite invisível (time 00:00:00)
+SELECT id_pedido, data_pedido 
+FROM pedidos 
+WHERE data_pedido BETWEEN '2024-01-01' AND '2024-03-31';</code></pre>
+  </div>
+
+  <h3>Pertencimento a Listas (IN)</h3>
+  <p>Cenário: Filtros de múltipla escolha e subconsultas dinâmicas.</p>
+  <div class="code-container">
+    <pre><code class="language-sql">-- Substituindo múltiplos ORs
+SELECT nome_vendedor FROM vendedores 
+WHERE unidade_federativa IN ('SP', 'RJ', 'MG', 'ES');
+
+-- Avançado: Subconsulta (Vendedores sem vendas em maio)
+SELECT nome_vendedor FROM vendedores 
+WHERE codigo_vendedor NOT IN (
+    SELECT codigo_vendedor FROM pedidos 
+    WHERE data_pedido BETWEEN '2024-05-01' AND '2024-05-31'
+);</code></pre>
+  </div>
+</section>
+
+<section class="section-box">
+  <h2>Representação gráfica</h2>
+  <p>Os diagramas abaixo ilustram o fluxo de decisão do motor de filtragem do SGBD:</p>
   <div class="mermaid">
     graph TD
     Data[Registro de Entrada] --> Op{Operador?}
     Op -->|LIKE| P{Padrão de Texto?}
     Op -->|BETWEEN| F{Dentro da Faixa?}
     Op -->|IN| L{Está na Lista?}
-    P -- Sim --> Result["Incluir no SELECT"]
+
+    P -- Sim --> Result["Incluir no SELECT (resultado)"]
     F -- Sim --> Result
     L -- Sim --> Result
+
+    P -- Não --> Trash[Descartar Linha]
+    F -- Não --> Trash
+    L -- Não --> Trash
   </div>
+  <div class="mermaid">
+    graph LR
+    A[Valor X] --> B{X BETWEEN A AND B}
+    B -- "X < A" --> C[Descartar]
+      B -- "A <= X <=B" --> D[Incluir]
+        B -- "X > B" --> C
 
-content_dicas: |
+        subgraph "Processamento de Faixa"
+        D
+        end
+  </div>
+</section>
+
+<div class="tip-box">
+  <h3>Dicas & Lembretes</h3>
   <ul>
-    <li><strong>Performance:</strong> Prefira <code>LIKE 'Padrão%'</code> a <code>LIKE '%Padrão'</code>.</li>
-    <li><strong>Sensibilidade:</strong> PostgreSQL é case-sensitive (LIKE vs ILIKE).</li>
-    <li><strong>Nulos:</strong> LIKE, IN e BETWEEN não capturam <code>NULL</code>.</li>
+    <li><strong>Performance:</strong> Prefira <code>LIKE 'Padrão%'</code> a <code>LIKE '%Padrão'</code> para permitir o
+      uso de índices B-tree.</li>
+    <li><strong>Sensibilidade:</strong> PostgreSQL é case-sensitive (LIKE vs ILIKE), MySQL depende do collation.</li>
+    <li><strong>Valores Nulos:</strong> Predicados como LIKE, IN e BETWEEN não capturam <code>NULL</code>. Use
+      <code>IS NULL</code> explicitamente se necessário.
+    </li>
+    <li><strong>Limites:</strong> O <code>BETWEEN</code> sempre inclui os valores das extremidades (inclusivo).</li>
   </ul>
+</div>
 
-content_pratica_real: |
-  <p><strong>E-commerce (Busca Inteligente):</strong> Implemente uma barra de pesquisa que utiliza <code>LIKE '%termo%'</code>.</p>
-  <p><strong>Relatórios Financeiros:</strong> Utilize o <code>BETWEEN</code> para extrair todas as vendas ocorridas entre o primeiro e o último dia do mês.</p>
+<section class="section-box">
+  <h2>Como aplicar na Prática</h2>
+  <ul>
+    <li><strong>E-commerce (Busca Inteligente):</strong> Implemente uma barra de pesquisa que utiliza
+      <code>LIKE '%termo%'</code> para buscar em títulos e descrições, permitindo que o cliente encontre o produto mesmo
+      sem saber o nome exato.
+    </li>
+    <li><strong>Relatórios Financeiros (Fechamento Mensal):</strong> Utilize o <code>BETWEEN</code> para extrair todas
+      as vendas ocorridas entre o primeiro e o último dia do mês, garantindo um relatório preciso para a contabilidade.
+    </li>
+    <li><strong>Sistemas de Filtros (Checkboxes):</strong> Quando um usuário seleciona várias categorias (ex:
+      Eletrônicos, Livros, Games) em um filtro lateral, utilize o operador <code>IN</code> para passar essa lista de IDs
+      diretamente para o banco em uma única consulta.</li>
+    <li><strong>Segurança (Blacklist):</strong> Bloqueie o acesso de uma lista específica de IPs ou IDs de usuários
+      suspeitos utilizando <code>NOT IN (lista_bloqueada)</code>.</li>
+  </ul>
+</section>
 
-content_referencias: |
+<section class="section-box">
+  <h2>Referências</h2>
   <ul>
     <li>MACHADO, Felipe Nery Rodrigues. Banco de Dados Projeto e Implementação. 3. ed. São Paulo: Érica, 2014.</li>
+    <li>TAKAI, Osvaldo Kotaro et al. Introdução a Banco de Dados. USP, 2005.</li>
     <li>MySQL Cookbook, 3rd Edition.</li>
+    <li>PostgreSQL: Up and Running.</li>
   </ul>
+</section>
 
-content_exercicios: |
+<section class="section-box">
+  <h2>Para Praticar</h2>
   <ul>
     <li><a href="#">Questionário: Filtros e Predicados</a></li>
     <li><a href="#">Laboratório 11: Consultas Avançadas</a></li>
   </ul>
----
+</section>

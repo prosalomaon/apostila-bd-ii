@@ -10,55 +10,7 @@ layout: base
     {% endif %}
   </header>
 
-  <section id="teoria" class="section-box">
-    <h2>Teoria & Conceitos</h2>
-    <div class="content">
-      {{ content_teoria | safe }}
-    </div>
-  </section>
-
-  <section id="codigo" class="section-box">
-    <h2>Exemplo de Código</h2>
-    <div class="content">
-      {{ content_codigo | safe }}
-    </div>
-  </section>
-
-  <section id="grafico" class="section-box">
-    <h2>Representação gráfica</h2>
-    <div class="content">
-      {{ content_grafico | safe }}
-    </div>
-  </section>
-
-  <div class="tip-box" id="dicas">
-    <h3>Dicas & Lembretes</h3>
-    <div class="content">
-      {{ content_dicas | safe }}
-    </div>
-  </div>
-
-  <section id="pratica-real" class="section-box">
-    <h2>Como aplicar na Prática</h2>
-    <div class="content">
-      {{ content_pratica_real | safe }}
-    </div>
-  </section>
-
-  <section id="referencias" class="section-box">
-    <h2>Referências</h2>
-    <div class="content">
-      {{ content_referencias | safe }}
-    </div>
-  </section>
-
-  <section id="exercicios" class="section-box exercises-section">
-    <h2>Para Praticar</h2>
-
-    <div class="content">
-      {{ content_exercicios | safe }}
-    </div>
-  </section>
+  {{ content | safe }}
 </article>
 
 {% set previousAula = collections.aulas | getPreviousCollectionItem(page) %}
@@ -79,4 +31,3 @@ layout: base
     <span></span>
   {% endif %}
 </nav>
-
