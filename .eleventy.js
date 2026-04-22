@@ -32,7 +32,7 @@ module.exports = function (eleventyConfig) {
 
   return {
     // Se for hospedar no GitHub Pages em um subdiretório, adicione o pathPrefix:
-    pathPrefix: "/apostila-bd-ii/",
+    // pathPrefix: "/apostila-bd-ii/",
     dir: {
       input: "src",
       output: "_site"
