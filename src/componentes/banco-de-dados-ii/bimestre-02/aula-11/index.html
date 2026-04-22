@@ -1,0 +1,64 @@
+---
+title: "DQL Avançada - Predicados IN, LIKE e BETWEEN"
+aula_numero: "11"
+description: "Explorando os predicados lógicos LIKE, BETWEEN e IN para filtragem avançada de dados."
+tags:
+  - bimestre-02
+
+content_teoria: |
+  <p>Os predicados são filtros lógicos que determinam a "sobrevivência" de um registro no conjunto de resultados, funcionando como a camada de inteligência da cláusula <code>WHERE</code>.</p>
+  <h3>1. LIKE (Busca de Padrões)</h3>
+  <p>Diferente do operador de igualdade (<code>=</code>), o <code>LIKE</code> trabalha com aproximação e padrões de texto.</p>
+  <ul>
+    <li><strong>Cenário Básico:</strong> "Quero todos os nomes que começam com A". &rarr; <code>LIKE 'A%'</code></li>
+    <li><strong>Cenário Avançado:</strong> "Quero códigos de produto que seguem o padrão: duas letras, qualquer coisa no meio e terminam com o número 5". &rarr; <code>LIKE 'AB%5'</code></li>
+  </ul>
+  <h3>2. BETWEEN (Faixa de Valores)</h3>
+  <p>O grande diferencial do <code>BETWEEN</code> é a legibilidade e a limpeza do código.</p>
+  <h3>3. IN (Membros de um Conjunto)</h3>
+  <p>O <code>IN</code> atua como um "redutor de múltiplos operadores OR".</p>
+
+content_codigo: |
+  <div class="code-container">
+    <pre><code class="language-sql">-- [ MySQL ]
+  SELECT descricao FROM produto WHERE descricao LIKE 'Gel%';
+  
+  -- [ PostgreSQL ]
+  SELECT descricao FROM produto WHERE descricao ILIKE 'gel%';</code></pre>
+  </div>
+
+content_grafico: |
+  <div class="mermaid">
+    graph TD
+    Data[Registro de Entrada] --> Op{Operador?}
+    Op -->|LIKE| P{Padrão de Texto?}
+    Op -->|BETWEEN| F{Dentro da Faixa?}
+    Op -->|IN| L{Está na Lista?}
+    P -- Sim --> Result["Incluir no SELECT"]
+    F -- Sim --> Result
+    L -- Sim --> Result
+  </div>
+
+content_dicas: |
+  <ul>
+    <li><strong>Performance:</strong> Prefira <code>LIKE 'Padrão%'</code> a <code>LIKE '%Padrão'</code>.</li>
+    <li><strong>Sensibilidade:</strong> PostgreSQL é case-sensitive (LIKE vs ILIKE).</li>
+    <li><strong>Nulos:</strong> LIKE, IN e BETWEEN não capturam <code>NULL</code>.</li>
+  </ul>
+
+content_pratica_real: |
+  <p><strong>E-commerce (Busca Inteligente):</strong> Implemente uma barra de pesquisa que utiliza <code>LIKE '%termo%'</code>.</p>
+  <p><strong>Relatórios Financeiros:</strong> Utilize o <code>BETWEEN</code> para extrair todas as vendas ocorridas entre o primeiro e o último dia do mês.</p>
+
+content_referencias: |
+  <ul>
+    <li>MACHADO, Felipe Nery Rodrigues. Banco de Dados Projeto e Implementação. 3. ed. São Paulo: Érica, 2014.</li>
+    <li>MySQL Cookbook, 3rd Edition.</li>
+  </ul>
+
+content_exercicios: |
+  <ul>
+    <li><a href="#">Questionário: Filtros e Predicados</a></li>
+    <li><a href="#">Laboratório 11: Consultas Avançadas</a></li>
+  </ul>
+---

@@ -1,0 +1,82 @@
+---
+layout: base
+---
+
+<article class="lesson-content">
+  <header class="lesson-header">
+    <h1>{{ title }}</h1>
+    {% if description %}
+      <p class="lesson-intro">{{ description }}</p>
+    {% endif %}
+  </header>
+
+  <section id="teoria" class="section-box">
+    <h2>Teoria & Conceitos</h2>
+    <div class="content">
+      {{ content_teoria | safe }}
+    </div>
+  </section>
+
+  <section id="codigo" class="section-box">
+    <h2>Exemplo de Código</h2>
+    <div class="content">
+      {{ content_codigo | safe }}
+    </div>
+  </section>
+
+  <section id="grafico" class="section-box">
+    <h2>Representação gráfica</h2>
+    <div class="content">
+      {{ content_grafico | safe }}
+    </div>
+  </section>
+
+  <div class="tip-box" id="dicas">
+    <h3>Dicas & Lembretes</h3>
+    <div class="content">
+      {{ content_dicas | safe }}
+    </div>
+  </div>
+
+  <section id="pratica-real" class="section-box">
+    <h2>Como aplicar na Prática</h2>
+    <div class="content">
+      {{ content_pratica_real | safe }}
+    </div>
+  </section>
+
+  <section id="referencias" class="section-box">
+    <h2>Referências</h2>
+    <div class="content">
+      {{ content_referencias | safe }}
+    </div>
+  </section>
+
+  <section id="exercicios" class="section-box exercises-section">
+    <h2>Para Praticar</h2>
+
+    <div class="content">
+      {{ content_exercicios | safe }}
+    </div>
+  </section>
+</article>
+
+{% set previousAula = collections.aulas | getPreviousCollectionItem(page) %}
+{% set nextAula = collections.aulas | getNextCollectionItem(page) %}
+
+<nav class="lesson-pagination">
+  {% if previousAula and previousAula.data.subject == subject %}
+    <a href="{{ previousAula.url | url }}" class="prev">← Aula {{ previousAula.data.aula_numero }}</a>
+  {% else %}
+    <span></span>
+  {% endif %}
+  
+  <a href="{{ ['/componentes/', subject, '/'] | join | url }}" class="back">Voltar ao Menu</a>
+  
+  {% if nextAula and nextAula.data.subject == subject %}
+    <a href="{{ nextAula.url | url }}" class="next">Aula {{ nextAula.data.aula_numero }} →</a>
+  {% else %}
+    <span></span>
+  {% endif %}
+</nav>
+

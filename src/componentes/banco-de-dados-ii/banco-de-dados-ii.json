@@ -1,0 +1,17 @@
+{
+  "subject": "banco-de-dados-ii",
+  "subject_title": "Banco de Dados II",
+  "subject_description": "Esta disciplina aprofunda o conhecimento em sistemas de gerenciamento de dados, focando na implementação física rigorosa, otimização de performance e automação avançada.",
+  "subject_status": "40 Aulas • 4 Bimestres",
+
+  "layout": "aula",
+
+  "tags": ["aula"],
+  "nav_text": "⮜ VOLTAR",
+  "bimester_titles": {
+    "bimestre-01": "Implementação Física e Integridade",
+    "bimestre-02": "Performance e Extração de Dados",
+    "bimestre-03": "Programabilidade e Automação",
+    "bimestre-04": "NoSQL e Inteligência de Dados"
+  }
+}

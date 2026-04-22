@@ -6,32 +6,39 @@ module.exports = function (eleventyConfig) {
 
   // Layout aliases
   eleventyConfig.addLayoutAlias('base', 'layouts/base.njk');
+  eleventyConfig.addLayoutAlias('aula', 'layouts/aula.njk');
+  eleventyConfig.addLayoutAlias('dashboard', 'layouts/dashboard.njk');
 
-  // Collections for bimestres
-  const sortByAula = (collection) => {
-    return collection.sort((a, b) => {
+  // Universal Collection for Lessons
+  eleventyConfig.addCollection("aulas", function (collectionApi) {
+    return collectionApi.getFilteredByTag("aula").sort((a, b) => {
+      const subjectA = a.data.subject || "";
+      const subjectB = b.data.subject || "";
+      if (subjectA !== subjectB) return subjectA.localeCompare(subjectB);
       return parseInt(a.data.aula_numero) - parseInt(b.data.aula_numero);
     });
+  });
+
+  // Collection for Subjects (Dashboards)
+  eleventyConfig.addCollection("subjects", function (collectionApi) {
+    return collectionApi.getFilteredByGlob("src/componentes/*/index.njk").sort((a, b) => {
+      return (a.data.subject_title || "").localeCompare(b.data.subject_title || "");
+    });
+  });
+
+
+  // Helper to filter collections by subject and bimester
+  const getLessons = (collection, subject, bimester) => {
+    return collection
+      .filter(item => item.data.subject === subject && item.data.tags.includes(bimester))
+      .sort((a, b) => parseInt(a.data.aula_numero) - parseInt(b.data.aula_numero));
   };
 
-  eleventyConfig.addCollection("bimestre01", function (collectionApi) {
-    return sortByAula(collectionApi.getFilteredByTag("bimestre-01"));
-  });
-
-  eleventyConfig.addCollection("bimestre02", function (collectionApi) {
-    return sortByAula(collectionApi.getFilteredByTag("bimestre-02"));
-  });
-
-  eleventyConfig.addCollection("bimestre03", function (collectionApi) {
-    return sortByAula(collectionApi.getFilteredByTag("bimestre-03"));
-  });
-
-  eleventyConfig.addCollection("bimestre04", function (collectionApi) {
-    return sortByAula(collectionApi.getFilteredByTag("bimestre-04"));
+  eleventyConfig.addNunjucksFilter("filterBySubjectBimester", function(collection, subject, bimester) {
+    return getLessons(collection, subject, bimester);
   });
 
   return {
-    // Se for hospedar no GitHub Pages em um subdiretório, adicione o pathPrefix:
     pathPrefix: "/apostila-bd-ii/",
     dir: {
       input: "src",
@@ -39,3 +46,4 @@ module.exports = function (eleventyConfig) {
     }
   };
 };
+
