@@ -1,0 +1,17 @@
+{
+  "subject": "programacao-web-iii",
+  "subject_title": "Programação Web III",
+  "subject_description": "Desenvolvimento de aplicações web complexas utilizando frameworks modernos, arquitetura MVC, APIs RESTful e integração com tecnologias mobile.",
+  "subject_status": "40 Aulas • 4 Bimestres",
+  "layout": "aula",
+  "tags": [
+    "aula"
+  ],
+  "nav_text": "⮜ VOLTAR",
+  "bimester_titles": {
+    "bimestre-01": "Arquitetura MVC e Fundamentos de Frameworks",
+    "bimestre-02": "Persistência Avançada, Segurança e Autenticação",
+    "bimestre-03": "Web Services, APIs e Integração Assíncrona",
+    "bimestre-04": "Mobile Integration, Performance e Fechamento"
+  }
+}
