@@ -181,6 +181,38 @@ header a {
   /* Removed as per screenshot showing title directly */
 }
 
+.code-container {
+  background: #f8f8f8;
+  border: 1px solid #ddd;
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+pre {
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.tip-box {
+  background: #000;
+  color: #fff;
+  padding: 2.5rem;
+  margin: 3rem 0;
+}
+
+.tip-box h3, .tip-box h4 {
+  color: #fff;
+  border-left: 10px solid #fff;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+
 .section-box {
   border: 2px solid var(--border);
   padding: 2.5rem;
