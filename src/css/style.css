@@ -67,6 +67,10 @@ li {
   margin-bottom: 0.3rem;
 }
 
+.nav-header {
+  border-bottom: 3px solid #000;
+}
+
 .logo {
   text-transform: uppercase;
   border: 2px solid #fff;
