@@ -18,7 +18,8 @@ tags:
     texto.</p>
   <ul>
     <li><strong>Cenário Básico:</strong> "Quero todos os nomes que começam com A". &rarr; <code>LIKE 'A%'</code></li>
-    <li><strong>Cenário Avançado:</strong> "Quero códigos de produto que seguem o padrão: duas letras, qualquer coisa no
+    <li><strong>Cenário Avançado:</strong> "Quero códigos de produto que seguem o padrão: começe com AB, qualquer coisa
+      no
       meio e terminam com o número 5". &rarr; <code>LIKE 'AB%5'</code></li>
     <li><strong>O Curinga <code>_</code> (Underline):</strong> Frequentemente negligenciado, ele é vital para padrões de
       tamanho fixo. Ex: <code>LIKE '___-2024'</code> encontra qualquer código de 3 caracteres que seja do ano de 2024.
@@ -47,8 +48,11 @@ tags:
       </tr>
       <tr>
         <td><strong>Performance</strong></td>
-        <td>Otimizado para <code>LIKE 'Prefixo%'</code> usando índices.</td>
-        <td>Utiliza índices B-tree (Prefixo) ou GIN/GIST para buscas complexas.</td>
+        <td>Otimizado para <code>LIKE 'Prefixo%'</code> usando índices, vai direto na letra inicial do texto (letra P
+          nesse exemplo). Se usar <code>LIKE '%Prefixo'</code>, não usa índice, vai comparar letra por letra.</td>
+        <td>Utiliza índices B-tree (Prefixo) ou GIN/GIST para buscas complexas. Faz uso de técnicas de otimização
+          como trigramas para buscas mais eficientes, sem depender somente do texto em si, mas também de pedaços de
+          texto.</td>
       </tr>
     </tbody>
   </table>
@@ -56,7 +60,8 @@ tags:
   <h3>2. BETWEEN (Faixa de Valores)</h3>
   <p>O grande diferencial do <code>BETWEEN</code> é a legibilidade e a limpeza do código.</p>
   <ul>
-    <li><strong>Inclusividade:</strong> Ele sempre inclui os "muros" da busca. <code>BETWEEN 10 AND 20</code> é
+    <li><strong>Inclusividade:</strong> Ele sempre inclui os limites (muros) da busca. <code>BETWEEN 10 AND 20</code>
+      é
       exatamente <code>valor >= 10 AND valor <= 20</code>.</li>
     <li><strong>Datas:</strong> É a forma mais elegante de filtrar períodos. Ex:
       <code>BETWEEN '2024-01-01' AND '2024-01-31'</code>.
