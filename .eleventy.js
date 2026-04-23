@@ -11,12 +11,14 @@ module.exports = function (eleventyConfig) {
 
   // Universal Collection for Lessons
   eleventyConfig.addCollection("aulas", function (collectionApi) {
-    return collectionApi.getFilteredByTag("aula").sort((a, b) => {
-      const subjectA = a.data.subject || "";
-      const subjectB = b.data.subject || "";
-      if (subjectA !== subjectB) return subjectA.localeCompare(subjectB);
-      return parseInt(a.data.aula_numero) - parseInt(b.data.aula_numero);
-    });
+    return collectionApi.getFilteredByTag("aula")
+      .filter(item => item.data.aula_numero)
+      .sort((a, b) => {
+        const subjectA = a.data.subject || "";
+        const subjectB = b.data.subject || "";
+        if (subjectA !== subjectB) return subjectA.localeCompare(subjectB);
+        return parseInt(a.data.aula_numero) - parseInt(b.data.aula_numero);
+      });
   });
 
   // Collection for Subjects (Dashboards)
