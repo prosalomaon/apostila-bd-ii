@@ -1,0 +1,22 @@
+---
+layout: base
+---
+
+<article class="lesson-content">
+  <header class="lesson-header">
+    <a href="../" class="back-link-class">← Voltar para Aula {{ aula_numero }}</a>
+    <h1>Exercício {{ exercicio_numero }}: {{ title }}</h1>
+    {% if description %}
+      <p class="lesson-intro">{{ description }}</p>
+    {% endif %}
+  </header>
+
+  <section class="section-box">
+    <h2>Enunciado</h2>
+    {{ content | safe }}
+  </section>
+
+  <nav class="lesson-pagination">
+    <a href="../" class="back">VOLTAR PARA AULA</a>
+  </nav>
+</article>
