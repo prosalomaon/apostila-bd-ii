@@ -1,18 +1,160 @@
 ---
 layout: exercicio
-title: "Exercício 01 - DQL Avançada - Predicados IN, LIKE e BETWEEN"
+title: "Predicados LIKE, BETWEEN e IN"
 exercicio_numero: "01"
 aula_numero: "11"
-description: "Primeira atividade prática para consolidar os conhecimentos da aula 11."
+description: "Atividade prática para fixação dos predicados de filtragem avançada em SQL."
 ---
 
-<p>Enunciado do exercício 01 em desenvolvimento para a disciplina...</p>
+<section class="section-box">
+  <h2>Enunciado</h2>
+  <p>Neste exercício, você irá aplicar os conhecimentos adquiridos sobre os predicados <strong>LIKE</strong>,
+    <strong>BETWEEN</strong> e <strong>IN</strong> para realizar consultas complexas em um banco de dados de streaming
+    de filmes. Você será desafiado a filtrar dados textuais, faixas de valores e conjuntos específicos de informações.
+  </p>
+</section>
+
+<section class="section-box">
+  <h2>Preparação</h2>
+  <ol>
+    <li><strong>Configuração do Ambiente:</strong> Abra seu terminal ou o MySQL Workbench e conecte-se ao seu servidor
+      local.</li>
+    <li><strong>Execução do Script:</strong> Copie o script da seção "1. Script de Preparação" e execute-o
+      integralmente. Verifique se o banco <code>streaming_db</code> foi criado com sucesso.</li>
+    <li><strong>Resolução dos Blocos:</strong>
+      <ul>
+        <li>Para cada item dos desafios, escreva o comando <code>SELECT</code> correspondente.</li>
+        <li>Execute comando por comando e valide se o resultado retornado condiz com o esperado pelo enunciado.</li>
+      </ul>
+    </li>
+    <li><strong>Validação:</strong> Compare seus resultados com a massa de dados inserida. Por exemplo, no Bloco 1, item
+      1, você deve encontrar filmes como "De Volta para o Futuro" e "O Exterminador do Futuro 2".</li>
+    <li><strong>Dica:</strong> Lembre-se que o <code>%</code> no <code>LIKE</code> substitui qualquer quantidade de
+      caracteres, enquanto o <code>_</code> substitui exatamente um caractere.</li>
+  </ol>
+</section>
+
+<section class="section-box">
+  <h2>1. Script de Preparação (MySQL)</h2>
+  <p>Execute o script abaixo no seu ambiente MySQL para criar o banco de dados, as tabelas e popular a massa de dados
+    necessária para os desafios.</p>
+  <div class="code-container">
+    <pre><code class="language-sql">CREATE DATABASE streaming_db;
+USE streaming_db;
+
+CREATE TABLE filmes (
+    id_filme INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150),
+    ano_lancamento INT,
+    categoria VARCHAR(50),
+    classificacao VARCHAR(5),
+    preco_aluguel DECIMAL(5,2)
+);
+
+CREATE TABLE acessos (
+    id_acesso INT AUTO_INCREMENT PRIMARY KEY,
+    id_filme INT,
+    data_acesso DATETIME,
+    usuario VARCHAR(50),
+    FOREIGN KEY (id_filme) REFERENCES filmes(id_filme)
+);
+
+-- Massa de Dados: 30 Filmes
+INSERT INTO filmes (titulo, ano_lancamento, categoria, classificacao, preco_aluguel) VALUES 
+('Matrix Recarregado', 2003, 'Ficção', '16', 5.90),
+('Matrix Revolutions', 2003, 'Ficção', '16', 5.90),
+('O Segredo do SQL', 2024, 'Documentário', 'L', 0.00),
+('A Rede Social', 2010, 'Drama', '12', 3.50),
+('Toy Story 1', 1995, 'Animação', 'L', 2.00),
+('Toy Story 2', 1999, 'Animação', 'L', 2.50),
+('Toy Story 3', 2010, 'Animação', 'L', 4.00),
+('Batman: O Cavaleiro das Trevas', 2008, 'Ação', '14', 4.50),
+('Coringa', 2019, 'Drama', '16', 6.00),
+('Blade Runner 2049', 2017, 'Ficção', '14', 7.00),
+('O Poderoso Chefão', 1972, 'Policial', '14', 2.90),
+('Pulp Fiction', 1994, 'Policial', '18', 3.00),
+('Clube da Luta', 1999, 'Drama', '18', 3.50),
+('Forrest Gump', 1994, 'Drama', 'L', 2.50),
+('Inception', 2010, 'Ficção', '14', 5.00),
+('Interstellar', 2014, 'Ficção', '10', 6.50),
+('O Rei Leão', 1994, 'Animação', 'L', 1.50),
+('Gladiador', 2000, 'Ação', '14', 3.20),
+('Vingadores: Ultimato', 2019, 'Ação', '12', 8.00),
+('Parasita', 2019, 'Suspense', '16', 7.50),
+('O Auto da Compadecida', 2000, 'Comédia', 'L', 2.00),
+('Cidade de Deus', 2002, 'Policial', '18', 4.00),
+('Central do Brasil', 1998, 'Drama', '12', 2.50),
+('Duna: Parte 2', 2024, 'Ficção', '14', 9.90),
+('O Exterminador do Futuro 2', 1991, 'Ação', '14', 2.00),
+('De Volta para o Futuro', 1985, 'Ficção', 'L', 1.50),
+('Tropa de Elite', 2007, 'Policial', '16', 4.50),
+('O Show de Truman', 1998, 'Drama', 'L', 3.00),
+('A Lista de Schindler', 1993, 'Drama', '14', 2.00),
+('O Silêncio dos Inocentes', 1991, 'Suspense', '14', 3.50);
+
+-- Massa de Dados: 20 Acessos
+INSERT INTO acessos (id_filme, data_acesso, usuario) VALUES
+(1, '2024-01-10 08:30:00', 'Ana Oliveira'),
+(3, '2024-01-12 14:20:00', 'Ricardo Santos'),
+(5, '2024-01-15 19:00:00', 'Carla Souza'),
+(10, '2024-01-20 22:45:00', 'Ana Oliveira'),
+(15, '2024-02-05 10:00:00', 'Marcos Lima'),
+(20, '2024-02-10 15:30:00', 'Ricardo Santos'),
+(24, '2024-02-28 23:59:59', 'Carla Souza'),
+(3, '2024-03-01 09:15:00', 'Ana Oliveira'),
+(8, '2024-03-15 20:00:00', 'Marcos Lima'),
+(2, '2024-03-20 18:30:00', 'Bruno Ferreira'),
+(22, '2024-03-25 21:00:00', 'Ricardo Santos'),
+(30, '2024-03-31 23:50:00', 'Ana Oliveira'),
+(1, '2024-04-01 07:00:00', 'Marcos Lima'),
+(19, '2024-04-05 19:20:00', 'Bruno Ferreira'),
+(27, '2024-04-10 20:45:00', 'Ricardo Santos'),
+(11, '2024-04-12 14:00:00', 'Ana Oliveira'),
+(14, '2024-04-15 16:30:00', 'Bruno Ferreira'),
+(17, '2024-04-18 10:00:00', 'Marcos Lima'),
+(26, '2024-04-20 09:00:00', 'Ricardo Santos'),
+(3, '2024-04-22 13:15:00', 'Ana Oliveira');</code></pre>
+  </div>
+</section>
+
+<section class="section-box">
+  <h2>2. Desafios de Prática</h2>
+
+  <h3>Bloco 1: LIKE</h3>
+  <ol>
+    <li>Liste todos os filmes que contenham a palavra 'Futuro' em qualquer parte do título.</li>
+    <li>Liste os filmes que começam com a letra 'O' e terminam com a letra 'o'.</li>
+    <li>Busque os filmes que possuem o padrão 'Toy Story' seguido de exatamente um caractere qualquer.</li>
+    <li>Identifique filmes cujos títulos possuam a sequência 'de' (com um espaço antes e um depois) em qualquer posição.
+    </li>
+    <li>Selecione os filmes que possuem exatamente 4 caracteres antes do ano '2049' no título.</li>
+  </ol>
+
+  <h3>Bloco 2: BETWEEN</h3>
+  <ol>
+    <li>Liste os filmes lançados entre os anos de 1990 e 1999.</li>
+    <li>Selecione os filmes cujo preço de aluguel esteja na faixa de 2,00 a 5,00.</li>
+    <li>Busque todos os acessos realizados durante o mês de Março de 2024.</li>
+    <li>Identifique os filmes que não possuem preço de aluguel entre 0,00 e 3,00.</li>
+    <li>Selecione os filmes cujo id_filme esteja entre 10 e 20, apresentando o resultado em ordem alfabética.</li>
+  </ol>
+
+  <h3>Bloco 3: IN</h3>
+  <ol>
+    <li>Selecione os filmes que pertençam às categorias 'Ação', 'Policial' ou 'Suspense'.</li>
+    <li>Liste os filmes que possuem classificação indicativa 'L', '10' ou '12'.</li>
+    <li>Utilizando o operador IN, liste os títulos dos filmes que aparecem na tabela de acessos.</li>
+    <li>Utilizando o operador NOT IN, identifique quais filmes ainda não possuem nenhum registro de acesso.</li>
+    <li>Liste os acessos realizados pelos usuários 'Ana Oliveira' ou 'Ricardo Santos'.</li>
+  </ol>
+</section>
 
 <div class="tip-box">
-  <h4>Orientações</h4>
+  <h4>Orientações Finais</h4>
   <ul>
-    <li>Leia atentamente o enunciado.</li>
-    <li>Consulte o conteúdo da aula caso tenha dúvidas.</li>
-    <li>Tente resolver de forma independente antes de buscar ajuda.</li>
+    <li>Tente resolver os exercícios sem consultar o material teórico primeiro.</li>
+    <li>Caso encontre erros de sintaxe, verifique o uso de aspas simples para strings e o ponto para decimais.</li>
+    <li>A prática leva à perfeição! Explore variações dos comandos para entender melhor o comportamento dos predicados.
+    </li>
   </ul>
 </div>
