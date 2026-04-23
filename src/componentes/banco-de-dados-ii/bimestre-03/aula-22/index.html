@@ -3,27 +3,27 @@ title: "Stored Procedures"
 aula_numero: "22"
 description: "Automatizando tarefas e encapsulando lógica de negócio diretamente no servidor de Banco de Dados."
 tags:
-  - aula
-  - bimestre-03
+- aula
+- bimestre-03
 ---
 
-    <section class="section-box">
-      <h2>Teoria & Conceitos</h2>
-      <p>Uma Stored Procedure (Procedimento Armazenado) é um conjunto de comandos SQL compilados e armazenados no
-        servidor. Elas permitem:</p>
-      <ul>
-        <li><strong>Reutilização:</strong> Escreva uma vez, execute em qualquer lugar do sistema.</li>
-        <li><strong>Segurança:</strong> Usuários podem executar a procedure sem ter acesso direto às tabelas
-          subjacentes.</li>
-        <li><strong>Performance:</strong> Reduz o tráfego de rede e aproveita o plano de execução em cache.</li>
-      </ul>
-    </section>
+<section class="section-box">
+  <h2>Teoria & Conceitos</h2>
+  <p>Uma Stored Procedure (Procedimento Armazenado) é um conjunto de comandos SQL compilados e armazenados no
+    servidor. Elas permitem:</p>
+  <ul>
+    <li><strong>Reutilização:</strong> Escreva uma vez, execute em qualquer lugar do sistema.</li>
+    <li><strong>Segurança:</strong> Usuários podem executar a procedure sem ter acesso direto às tabelas
+      subjacentes.</li>
+    <li><strong>Performance:</strong> Reduz o tráfego de rede e aproveita o plano de execução em cache.</li>
+  </ul>
+</section>
 
-    <section class="section-box">
-      <h2>Exemplo de Código</h2>
-      <p>Criação de uma procedure para registrar uma venda e atualizar o estoque:</p>
-      <div class="code-container">
-        <pre><code>CREATE PROCEDURE RegistrarVenda
+<section class="section-box">
+  <h2>Exemplo de Código</h2>
+  <p>Criação de uma procedure para registrar uma venda e atualizar o estoque:</p>
+  <div class="code-container">
+    <pre><code>CREATE PROCEDURE RegistrarVenda
     @ProdutoID INT,
     @Quantidade INT
 AS
@@ -37,47 +37,47 @@ BEGIN
         WHERE ProdutoID = @ProdutoID;
     COMMIT TRANSACTION
 END;</code></pre>
-      </div>
-    </section>
+  </div>
+</section>
 
-    <section class="section-box">
-      <h2>Diagramação Lógica</h2>
-      <div class="mermaid">
-        sequenceDiagram
-        participant App as Aplicação
-        participant SGBD as Servidor DB
-        participant Proc as Stored Procedure
-        App->>SGBD: EXEC RegistrarVenda(10, 2)
-        SGBD->>Proc: Executa Lógica
-        Proc->>SGBD: INSERT Vendas
-        Proc->>SGBD: UPDATE Estoque
-        SGBD-->>App: Sucesso / Erro
-      </div>
-    </section>
+<section class="section-box">
+  <h2>Diagramação Lógica</h2>
+  <div class="mermaid">
+    sequenceDiagram
+    participant App as Aplicação
+    participant SGBD as Servidor DB
+    participant Proc as Stored Procedure
+    App->>SGBD: EXEC RegistrarVenda(10, 2)
+    SGBD->>Proc: Executa Lógica
+    Proc->>SGBD: INSERT Vendas
+    Proc->>SGBD: UPDATE Estoque
+    SGBD-->>App: Sucesso / Erro
+  </div>
+</section>
 
-    <div class="tip-box">
-      <h4>Dicas & Lembretes</h4>
-      <p>Sempre use <code>BEGIN TRANSACTION</code> e <code>COMMIT/ROLLBACK</code> dentro de procedures que alteram
-        dados, garantindo a atomicidade da operação.</p>
-    </div>
+<div class="tip-box">
+  <h4>Dicas & Lembretes</h4>
+  <p>Sempre use <code>BEGIN TRANSACTION</code> e <code>COMMIT/ROLLBACK</code> dentro de procedures que alteram
+    dados, garantindo a atomicidade da operação.</p>
+</div>
 
-    <section class="section-box">
-      <h2>Como aplicar na Prática</h2>
-      <p>Procedures são ideais para processos complexos de fechamento de mês, geração de relatórios consolidados e
-        qualquer operação que envolva múltiplas tabelas e regras de validação.</p>
-    </section>
+<section class="section-box">
+  <h2>Como aplicar na Prática</h2>
+  <p>Procedures são ideais para processos complexos de fechamento de mês, geração de relatórios consolidados e
+    qualquer operação que envolva múltiplas tabelas e regras de validação.</p>
+</section>
 
-    <section class="section-box">
-      <h2>Referências</h2>
-      <ul>
-        <li>SQL Server: CREATE PROCEDURE (Transact-SQL).</li>
-        <li>Oracle PL/SQL Programming - Steven Feuerstein.</li>
-      </ul>
-    </section>
+<section class="section-box">
+  <h2>Referências</h2>
+  <ul>
+    <li>SQL Server: CREATE PROCEDURE (Transact-SQL).</li>
+    <li>Oracle PL/SQL Programming - Steven Feuerstein.</li>
+  </ul>
+</section>
 
-    <section class="section-box">
-      <h2>Links para Exercícios</h2>
-      <ul>
-        <li><a href="#">Lab: Criando sua primeira Procedure de Cadastro</a></li>
-      </ul>
-    </section>
+<section class="section-box">
+  <h2>Para Praticar</h2>
+  <ul>
+    <li><a href="#">Lab: Criando sua primeira Procedure de Cadastro</a></li>
+  </ul>
+</section>
